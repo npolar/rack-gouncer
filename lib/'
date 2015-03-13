@@ -1,0 +1,22 @@
+module Gouncer
+  class Client
+
+    attr_accessor cfg
+
+    def initialize(config={})
+      #if !config.nil? && config['url'] && config['system']
+        self.cfg = config
+      #end
+    end
+
+    def authorize
+      response = Typhoeus::Request.new(
+        cfg['url'] + "/authorize",
+        method: post,
+        body: { system: cfg['system'] },
+        headers: { Authorization: cfg['authorization'] }, # Contents from the Authorization header
+      ).run
+    end
+
+  end
+end
