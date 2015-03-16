@@ -15,7 +15,7 @@ module Rack
 
     def call(env)
       @env = env
-      err = unauthorized_error
+      err = credentials_error
 
       # Call gouncer with the system and the token
       if @config['open'] && read?
@@ -23,6 +23,7 @@ module Rack
       elsif authorization?
         @config[:authorization] = env['HTTP_AUTHORIZATION']
         @response = client.authorize
+        err = unauthorized_error
 
         if @response.code == 200
           body = JSON.parse(@response.body)
@@ -70,7 +71,11 @@ module Rack
     end
 
     def unauthorized_error
-      {error: "Not authorized"}.to_json
+      {error: "Unauthorized: You don't have access to this sytem"}.to_json
+    end
+
+    def credentials_error
+      {error: "Unauthorized: No credentials provided"}.to_json
     end
   end
 end
