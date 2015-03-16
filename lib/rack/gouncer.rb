@@ -22,26 +22,29 @@ module Rack
       elsif authorization?
         @config[:authorization] = env['HTTP_AUTHORIZATION']
         @response = client.authorize
+        err = unauthorized_error
 
         if @response.code == 200
           body = JSON.parse(@response.body)
+          err = rights_error
 
           case env['REQUEST_METHOD']
           when "GET" then
             return @app.call(env) if body["rights"].include?('read')
           when "PUT" then
-            return @app.call(env) if body['rights'].include?('update')
+            return @app.call(env) if body['rights'].all?{|right| ['create', 'update'].include?(right) }
           when "POST" then
             return @app.call(env) if body['rights'].include?('create')
           when "DELETE" then
             return @app.call(env) if body['rights'].include?('delete')
           end
-          # Bleed the auth server error?
         end
       end
 
-      return [401, {"Content-Type" => "application/json"}, [{error: @response.body}.to_json]]
+      # Log the auth server message to STERR
+      log.debug "[Rack-Gouncer] - #{@response.body}"
 
+      return [401, {"Content-Type" => "application/json"}, [err]]
     end
 
     def client
@@ -56,5 +59,18 @@ module Rack
       return ["GET","HEAD","OPTIONS"].include?( @env['REQUEST_METHOD'] )
     end
 
+    def log
+      l = ::Logger.new(STDERR)
+      l.level = ::Logger::DEBUG
+      return l
+    end
+
+    def rights_error
+      {error: "Unauthorized: Insufficient access rights"}.to_json
+    end
+
+    def unauthorized_error
+      {error: "Not authorized"}.to_json
+    end
   end
 end
