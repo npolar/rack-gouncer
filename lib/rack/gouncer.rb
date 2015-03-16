@@ -42,7 +42,7 @@ module Rack
       end
 
       # Log the auth server message to STERR
-      log.debug "[Rack-Gouncer] - #{@response.body}"
+      log.debug "[Rack-Gouncer] - #{@response.body}" if @response
 
       return [401, {"Content-Type" => "application/json"}, [err]]
     end
