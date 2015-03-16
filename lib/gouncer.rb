@@ -1,4 +1,5 @@
 require "rack"
+require "logger"
 require "typhoeus"
 require "yajl/json_gem"
 
