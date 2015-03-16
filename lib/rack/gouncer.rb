@@ -15,6 +15,7 @@ module Rack
 
     def call(env)
       @env = env
+      err = unauthorized_error
 
       # Call gouncer with the system and the token
       if @config['open'] && read?
@@ -22,7 +23,6 @@ module Rack
       elsif authorization?
         @config[:authorization] = env['HTTP_AUTHORIZATION']
         @response = client.authorize
-        err = unauthorized_error
 
         if @response.code == 200
           body = JSON.parse(@response.body)
