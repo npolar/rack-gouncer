@@ -18,7 +18,7 @@ module Rack
       err = credentials_error
 
       # Call gouncer with the system and the token
-      if @config['open'] && read?
+      if @config[:open] && read?
         return @app.call(env)
       elsif authorization?
         @config[:authorization] = env['HTTP_AUTHORIZATION']
