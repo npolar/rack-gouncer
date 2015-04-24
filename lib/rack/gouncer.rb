@@ -33,7 +33,8 @@ module Rack
           when "GET" then
             return @app.call(env) if body["rights"].include?('read')
           when "PUT" then
-            return @app.call(env) if body['rights'].all?{|right| ['create', 'update'].include?(right) }
+            return @app.call(env) if body['rights'].include?('update')
+            return @app.call(env) if body['rights'].include?('create')
           when "POST" then
             return @app.call(env) if body['rights'].include?('create')
           when "DELETE" then
