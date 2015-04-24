@@ -13,7 +13,7 @@ module Gouncer
 
     def authorize
       response = Typhoeus::Request.new(
-        "#{url}/authorize",
+        "#{url}/authorize/",
         method: "post",
         body: { system: system }.to_json,
         ssl_verifypeer: false,
