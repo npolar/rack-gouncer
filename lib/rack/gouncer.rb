@@ -72,7 +72,7 @@ module Rack
     end
 
     def unauthorized_error
-      {error: "Unauthorized: You don't have access to this sytem"}.to_json
+      {error: "Unauthorized: You don't have access to this system"}.to_json
     end
 
     def credentials_error
