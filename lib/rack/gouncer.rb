@@ -40,6 +40,10 @@ module Rack
           when "DELETE" then
             return @app.call(env) if body['rights'].include?('delete')
           end
+
+          return [403, {"Content-Type" => "application/json"}, [err]]
+        elsif @response.code == 403
+          return [403, {"Content-TYpe" => "application/json"}, [forbbiden_error]]
         end
       end
 
@@ -72,7 +76,11 @@ module Rack
     end
 
     def unauthorized_error
-      {error: "Unauthorized: You don't have access to this system"}.to_json
+      {error: "Unauthorized: Invalid username or password"}.to_json
+    end
+
+    def forbbiden_error
+      {error: "Forbidden. You don't have permission to perform this action"}.to_json
     end
 
     def credentials_error
