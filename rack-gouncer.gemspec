@@ -25,5 +25,4 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "rack",       "~> 1.6.8"
   spec.add_dependency "yajl-ruby",  "~> 1.2.2"
-  spec.add_dependency "typhoeus",   "~> 1.1.2"
 end

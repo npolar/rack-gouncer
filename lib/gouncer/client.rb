@@ -12,13 +12,15 @@ module Gouncer
     end
 
     def authorize
-      response = Typhoeus::Request.new(
-        "#{url}/authorize/",
-        method: "post",
-        body: { system: system }.to_json,
-        ssl_verifypeer: false,
-        headers: { Authorization: authorization }, # Contents from the Authorization header
-      ).run
+      uri = URI("#{url}/authorize/")
+      req = Net::HTTP::Post.new(uri)
+      req.body = { system: system}.to_json
+      req.content_type = 'application/json'
+      req['Authorization'] = authorization
+
+      response = Net::HTTP.start(uri.hostname, uri.port, :use_ssl => uri.scheme == "https") do |http|
+        http.request(req)
+      end
     end
 
   end

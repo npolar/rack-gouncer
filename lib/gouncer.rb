@@ -1,6 +1,6 @@
 require "rack"
 require "logger"
-require "typhoeus"
+require "net/http"
 require "yajl/json_gem"
 
 require_relative "gouncer/version"
