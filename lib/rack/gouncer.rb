@@ -25,7 +25,7 @@ module Rack
         @response = client.authorize
         err = unauthorized_error
 
-        if @response.code == 200
+        if @response.code == '200'
           body = JSON.parse(@response.body)
           err = rights_error
 
