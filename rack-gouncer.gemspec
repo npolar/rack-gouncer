@@ -24,5 +24,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "simplecov"
 
   spec.add_dependency "rack",       "1.6.8"
-  spec.add_dependency "yajl-ruby",  "1.3.0"
+  spec.add_dependency "yajl-ruby",  "1.3.1"
 end
